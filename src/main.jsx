@@ -3,13 +3,15 @@ import { createRoot } from 'react-dom/client';
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, Bell, BookOpen, Bookmark, Check,
   ChevronDown, ChevronRight, CircleHelp, Clock3, Code2, Compass, Flame, GraduationCap,
-  LayoutDashboard, Lightbulb, Menu, Play, Search, Settings, Sparkles, Terminal,
-  Trophy, UserRound, X, Zap,
+  LayoutDashboard, Lightbulb, Menu, Moon, Play, Search, Settings, Sparkles, Terminal,
+  Sun, Trophy, UserRound, X, Zap,
 } from 'lucide-react';
 import './styles.css';
 import './catalog.css';
 import './dashboard-pages.css';
 import './membership.css';
+import './theme.css';
+import './theme-art.css';
 
 const courses = [
   { id: 1, title: 'HTML & CSS Foundations', category: 'Web development', level: 'Beginner', lessons: 18, duration: '4h 20m', color: 'mint', icon: '‹ ›', progress: 68, description: 'Build beautiful, responsive websites from scratch.', tag: 'Continue learning', mentor: 'Sofia Chen' },
@@ -40,8 +42,13 @@ function Logo({ small = false, onClick }) {
   </button>;
 }
 
+function ThemeToggle({ isDarkMode, onToggle }) {
+  return <button className="theme-toggle" type="button" onClick={onToggle} aria-label={isDarkMode?'Switch to light mode':'Switch to dark mode'} title={isDarkMode?'Switch to light mode':'Switch to dark mode'}>{isDarkMode?<Sun size={16}/>:<Moon size={16}/>}</button>;
+}
+
 function App() {
   const [inAcademy, setInAcademy] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => window.localStorage.getItem('themr-academy-theme') === 'dark');
   const [publicPage, setPublicPage] = useState('home');
   const [enrolledCourseIds, setEnrolledCourseIds] = useState(() => {
     try { const stored = JSON.parse(window.localStorage.getItem('themr-academy-enrollments') || '[]'); return Array.isArray(stored) ? stored : []; }
@@ -78,6 +85,9 @@ function App() {
   useEffect(() => {
     window.localStorage.setItem('themr-academy-monthly-member', String(isMonthlyMember));
   }, [isMonthlyMember]);
+  useEffect(() => {
+    window.localStorage.setItem('themr-academy-theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
   const goTo = (nav, id) => {
     setActiveNav(nav); setMenuOpen(false); setProfileOpen(false);
     if (nav !== 'Explore') { setActiveCategory('All courses'); setQuery(''); }
@@ -92,11 +102,11 @@ function App() {
     return list;
   }, [activeNav, filteredCourses, enrolledCourseIds, saved]);
 
-  if (!inAcademy) return publicPage === 'courses'
-    ? <CoursesPage onHome={() => setPublicPage('home')} onEnter={() => setInAcademy(true)} onMyLearning={() => { setActiveNav('My learning'); setInAcademy(true); window.scrollTo({ top: 0 }); }} enrolledIds={enrolledCourseIds} onEnroll={enrollCourse} isMonthlyMember={isMonthlyMember} onSubscribe={() => setIsMonthlyMember(true)} />
-    : <Landing onEnter={() => setInAcademy(true)} onBrowse={() => setPublicPage('courses')} />;
+  if (!inAcademy) return <div className={`theme-frame ${isDarkMode?'dark-mode':''}`}>{publicPage === 'courses'
+    ? <CoursesPage onHome={() => setPublicPage('home')} onEnter={() => setInAcademy(true)} onMyLearning={() => { setActiveNav('My learning'); setInAcademy(true); window.scrollTo({ top: 0 }); }} enrolledIds={enrolledCourseIds} onEnroll={enrollCourse} isMonthlyMember={isMonthlyMember} onSubscribe={() => setIsMonthlyMember(true)} isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(current=>!current)} />
+    : <Landing onEnter={() => setInAcademy(true)} onBrowse={() => setPublicPage('courses')} isDarkMode={isDarkMode} onToggleTheme={() => setIsDarkMode(current=>!current)} />}</div>;
 
-  return <div className="app-shell">
+  return <div className={`app-shell ${isDarkMode?'dark-mode':''}`}>
     <aside className={`sidebar ${menuOpen ? 'sidebar-open' : ''}`}>
       <div className="sidebar-top"><Logo onClick={() => goTo('Overview')} /><button className="mobile-close" aria-label="Close menu" onClick={() => setMenuOpen(false)}><X size={19}/></button></div>
       <div className="nav-label">MENU</div>
@@ -128,7 +138,7 @@ function App() {
       <header className="topbar">
         <button className="mobile-menu" aria-label="Open menu" onClick={() => setMenuOpen(true)}><Menu size={20}/></button>
         <div className="breadcrumb"><span>Academy</span><ChevronRight size={14}/><strong>{activeNav}</strong></div>
-        <div className="topbar-right"><span className="topbar-date">MONDAY, OCTOBER 13</span><button className="icon-button notification-button" aria-label="Notifications" onClick={() => notify('You’re all caught up!')}><Bell size={18}/><i/></button><button className="top-avatar" aria-label="Open profile" onClick={() => goTo('Profile')}>M</button></div>
+        <div className="topbar-right"><span className="topbar-date">MONDAY, OCTOBER 13</span><ThemeToggle isDarkMode={isDarkMode} onToggle={()=>setIsDarkMode(current=>!current)}/><button className="icon-button notification-button" aria-label="Notifications" onClick={() => notify('You’re all caught up!')}><Bell size={18}/><i/></button><button className="top-avatar" aria-label="Open profile" onClick={() => goTo('Profile')}>M</button></div>
       </header>
       <div className="page-content">
         {activeNav === 'Overview' ? <>
@@ -198,7 +208,7 @@ function ProfilePage({ enrolledCourses, isMonthlyMember, onExplore, onMyLearning
   </div>;
 }
 
-function Landing({ onEnter, onBrowse }) {
+function Landing({ onEnter, onBrowse, isDarkMode, onToggleTheme }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -221,7 +231,7 @@ function Landing({ onEnter, onBrowse }) {
         <button onClick={() => jumpTo('landing-paths')}>Learning paths</button>
         <button onClick={() => jumpTo('landing-about')}>Why TheMR</button>
       </nav>
-      <div className="landing-actions"><button className="login-link" onClick={onEnter}>Log in</button><button className="landing-cta" onClick={onEnter}>Start learning <ArrowRight size={15}/></button></div>
+      <div className="landing-actions"><ThemeToggle isDarkMode={isDarkMode} onToggle={onToggleTheme}/><button className="login-link" onClick={onEnter}>Log in</button><button className="landing-cta" onClick={onEnter}>Start learning <ArrowRight size={15}/></button></div>
       <button className="landing-menu-toggle" aria-label="Open navigation" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen?<X size={20}/>:<Menu size={20}/>}</button>
     </header>
 
@@ -244,7 +254,7 @@ function Landing({ onEnter, onBrowse }) {
   </main>;
 }
 
-function CoursesPage({ onHome, onEnter, onMyLearning, enrolledIds, onEnroll, isMonthlyMember, onSubscribe }) {
+function CoursesPage({ onHome, onEnter, onMyLearning, enrolledIds, onEnroll, isMonthlyMember, onSubscribe, isDarkMode, onToggleTheme }) {
   const [activeCategory, setActiveCategory] = useState('All courses');
   const [query, setQuery] = useState('');
   const [detailsId, setDetailsId] = useState(null);
@@ -267,7 +277,7 @@ function CoursesPage({ onHome, onEnter, onMyLearning, enrolledIds, onEnroll, isM
     <header className="landing-header catalog-header">
       <Logo small onClick={onHome}/>
       <nav className="landing-nav catalog-nav"><button onClick={onHome}>Home</button><button className="catalog-nav-active">Courses</button><button onClick={onEnter}>Learning space</button></nav>
-      <div className="landing-actions"><button className="login-link" onClick={onEnter}>Log in</button><button className="landing-cta" onClick={onMyLearning}>My learning <ArrowRight size={15}/></button></div>
+      <div className="landing-actions"><ThemeToggle isDarkMode={isDarkMode} onToggle={onToggleTheme}/><button className="login-link" onClick={onEnter}>Log in</button><button className="landing-cta" onClick={onMyLearning}>My learning <ArrowRight size={15}/></button></div>
     </header>
 
     <section className="catalog-hero"><div className="catalog-hero-copy"><div className="landing-eyebrow"><span/>YOUR NEXT STEP STARTS HERE</div><h1>Learn a skill.<br/><span>Make it yours.</span></h1><p>Pick a course, follow along, and build something you’re proud of. Every course is designed to help you learn by doing.</p><div className="catalog-hero-meta"><span><Check size={13}/> Beginner-friendly</span><i/><span><Check size={13}/> Learn at your pace</span><i/><span><Check size={13}/> Monthly membership</span></div></div><div className="catalog-hero-art"><div className="catalog-circle circle-one"/><div className="catalog-circle circle-two"/><div className="catalog-hero-chip"><GraduationCap size={18}/><span>YOUR LEARNING PATH</span></div><div className="catalog-step step-one"><b>01</b><span>Choose a course</span><Check size={14}/></div><div className="catalog-step step-two"><b>02</b><span>Learn by building</span><span className="step-play"><Play size={10} fill="currentColor"/></span></div><div className="catalog-step step-three"><b>03</b><span>See what you can do</span><Sparkles size={14}/></div><div className="catalog-path-line"/></div></section>

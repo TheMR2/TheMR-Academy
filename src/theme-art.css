@@ -1,0 +1,9 @@
+/* Keep the code terminal unchanged; theme only the floating cards in the illustration. */
+.dark-mode .hero-sticker{background:#202a23;border-color:#37473b;color:#dce6dc;box-shadow:0 7px 20px #0005}
+.dark-mode .sticker-top>span{color:#8bd5a3}
+.dark-mode .sticker-bottom>span{background:#2a4230;color:#a9e0b1}
+.dark-mode .landing-preview{background:#1c251e;border-color:#354238;box-shadow:0 12px 25px #0006}
+.dark-mode .preview-label{background:#263329;color:#b8c8b8}
+.dark-mode .preview-sparkle{color:#86d6a0}
+.dark-mode .preview-content>b{color:#e1ebe0}
+.dark-mode .preview-content>i{color:#9bcaa0}
