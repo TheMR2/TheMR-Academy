@@ -38,7 +38,8 @@ export function DashboardLibrary({
   setQuery,
   onSave,
   onDetails,
-  onSubscribe,
+  onPlay,
+  onViewPlans,
   onEnroll,
   enrolledIds,
   onBrowse,
@@ -48,13 +49,6 @@ export function DashboardLibrary({
   const isExplore = mode === "Explore";
   const isSaved = mode === "Saved";
   const copy = PAGE_COPY[mode] ?? PAGE_COPY["My learning"];
-
-  const openPlan = () => {
-    onSubscribe();
-    setMembershipMessage(
-      "Monthly membership activated in this preview. Payment processing is not connected yet.",
-    );
-  };
 
   const resetFilters = () => {
     setActiveCategory("All courses");
@@ -82,7 +76,7 @@ export function DashboardLibrary({
           isMonthlyMember={isMonthlyMember}
           message={membershipMessage}
           onMessage={setMembershipMessage}
-          onSubscribe={openPlan}
+          onViewPlans={onViewPlans}
         />
       )}
 
@@ -116,8 +110,9 @@ export function DashboardLibrary({
               isMonthlyMember={isMonthlyMember}
               onSave={onSave}
               onDetails={onDetails}
+              onPlay={onPlay}
               onEnroll={onEnroll}
-              onSubscribePlan={openPlan}
+              onSubscribePlan={onViewPlans}
             />
           ))}
         </div>

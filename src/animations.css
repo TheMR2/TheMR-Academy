@@ -1,0 +1,487 @@
+/* Motion design system — TheMR Academy */
+
+/* ---------- keyframes ---------- */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bar-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes dot-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.4);
+  }
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes flame-flicker {
+  0%,
+  100% {
+    transform: scale(1) rotate(-3deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(3deg);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes nudge-right {
+  to {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes theme-icon-in {
+  from {
+    opacity: 0;
+    transform: rotate(-100deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes theme-sweep {
+  from {
+    transform: translateX(-100%);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0.4;
+  }
+}
+
+/* ---------- reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .will-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ---------- global micro-interactions ---------- */
+
+button {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    opacity 0.18s ease;
+}
+button:not(:disabled):active {
+  transform: translateY(1px) scale(0.98);
+}
+a {
+  transition:
+    color 0.18s ease,
+    opacity 0.18s ease;
+}
+svg {
+  transition: transform 0.2s ease;
+}
+
+/* ---------- page transitions ---------- */
+
+.page-content > *,
+.theme-frame > * {
+  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* ---------- scroll reveal (JS adds .will-reveal / .revealed) ---------- */
+
+.will-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.will-reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- staggered grids (mount) ---------- */
+
+.courses-grid > *,
+.library-grid > *,
+.catalog-grid > *,
+.tracks-grid > *,
+.landing-course-grid > *,
+.lesson-panel-list > *,
+.settings-grid > *,
+.profile-shortcut-grid > *,
+.profile-stats-grid > *,
+.plans-grid > *,
+.faq-grid > *,
+.week-days > *,
+.learning-paths > * {
+  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.courses-grid > *:nth-child(2),
+.library-grid > *:nth-child(2),
+.catalog-grid > *:nth-child(2),
+.tracks-grid > *:nth-child(2),
+.landing-course-grid > *:nth-child(2),
+.lesson-panel-list > *:nth-child(2),
+.settings-grid > *:nth-child(2),
+.profile-shortcut-grid > *:nth-child(2),
+.profile-stats-grid > *:nth-child(2),
+.plans-grid > *:nth-child(2),
+.faq-grid > *:nth-child(2),
+.week-days > *:nth-child(2),
+.learning-paths > *:nth-child(2) {
+  animation-delay: 0.06s;
+}
+.courses-grid > *:nth-child(3),
+.library-grid > *:nth-child(3),
+.catalog-grid > *:nth-child(3),
+.tracks-grid > *:nth-child(3),
+.landing-course-grid > *:nth-child(3),
+.lesson-panel-list > *:nth-child(3),
+.settings-grid > *:nth-child(3),
+.profile-shortcut-grid > *:nth-child(3),
+.profile-stats-grid > *:nth-child(3),
+.plans-grid > *:nth-child(3),
+.faq-grid > *:nth-child(3),
+.week-days > *:nth-child(3),
+.learning-paths > *:nth-child(3) {
+  animation-delay: 0.12s;
+}
+.courses-grid > *:nth-child(4),
+.library-grid > *:nth-child(4),
+.catalog-grid > *:nth-child(4),
+.tracks-grid > *:nth-child(4),
+.landing-course-grid > *:nth-child(4),
+.lesson-panel-list > *:nth-child(4),
+.settings-grid > *:nth-child(4),
+.profile-shortcut-grid > *:nth-child(4),
+.profile-stats-grid > *:nth-child(4),
+.faq-grid > *:nth-child(4),
+.week-days > *:nth-child(4),
+.learning-paths > *:nth-child(4) {
+  animation-delay: 0.18s;
+}
+.courses-grid > *:nth-child(5),
+.library-grid > *:nth-child(5),
+.catalog-grid > *:nth-child(5),
+.landing-course-grid > *:nth-child(5),
+.lesson-panel-list > *:nth-child(5) {
+  animation-delay: 0.24s;
+}
+.courses-grid > *:nth-child(6),
+.library-grid > *:nth-child(6),
+.catalog-grid > *:nth-child(6),
+.landing-course-grid > *:nth-child(6),
+.lesson-panel-list > *:nth-child(6) {
+  animation-delay: 0.3s;
+}
+.courses-grid > *:nth-child(n + 7),
+.library-grid > *:nth-child(n + 7),
+.catalog-grid > *:nth-child(n + 7),
+.landing-course-grid > *:nth-child(n + 7),
+.lesson-panel-list > *:nth-child(n + 7) {
+  animation-delay: 0.34s;
+}
+
+/* ---------- hero copy stagger ---------- */
+
+.hero-copy > *,
+.landing-hero-copy > *,
+.catalog-hero-copy > * {
+  animation: rise-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.hero-copy > *:nth-child(2),
+.landing-hero-copy > *:nth-child(2),
+.catalog-hero-copy > *:nth-child(2) {
+  animation-delay: 0.07s;
+}
+.hero-copy > *:nth-child(3),
+.landing-hero-copy > *:nth-child(3),
+.catalog-hero-copy > *:nth-child(3) {
+  animation-delay: 0.14s;
+}
+.hero-copy > *:nth-child(4),
+.landing-hero-copy > *:nth-child(4),
+.catalog-hero-copy > *:nth-child(4) {
+  animation-delay: 0.21s;
+}
+.hero-copy > *:nth-child(5),
+.landing-hero-copy > *:nth-child(5),
+.catalog-hero-copy > *:nth-child(5) {
+  animation-delay: 0.28s;
+}
+.hero-copy > *:nth-child(n + 6),
+.landing-hero-copy > *:nth-child(n + 6),
+.catalog-hero-copy > *:nth-child(n + 6) {
+  animation-delay: 0.32s;
+}
+
+/* ---------- progress fills ---------- */
+
+.progress-track > div,
+.library-progress em,
+.player-progress em {
+  transform-origin: left center;
+  animation: bar-fill 1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s backwards;
+}
+
+/* ---------- card & panel lifts ---------- */
+
+.hero-card,
+.settings-card,
+.settings-confirm,
+.profile-hero-card,
+.profile-membership-card,
+.profile-details-card,
+.about-card,
+.stat-card,
+.lesson-content,
+.enroll-confirmation {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+.hero-card:hover,
+.settings-card:hover,
+.profile-hero-card:hover,
+.profile-membership-card:hover,
+.about-card:hover,
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px #1c33241a;
+}
+
+/* ---------- nav & link icon nudges ---------- */
+
+.side-nav .nav-item:hover svg,
+.sidebar-bottom .nav-item:hover svg,
+.player-back:hover svg,
+.library-details:hover svg,
+.library-remove-save:hover svg,
+.player-nav button:hover:not(:disabled) svg,
+.primary-button:hover svg,
+.modal-start-button:hover svg:last-child,
+.landing-primary:hover svg,
+.landing-cta:hover svg {
+  animation: nudge-right 0.25s ease both;
+}
+.nav-item:hover svg {
+  color: #56bb91;
+}
+
+/* ---------- settings & modal rows ---------- */
+
+.settings-card .setting-row {
+  animation: rise-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.settings-card .setting-row:nth-child(2) {
+  animation-delay: 0.05s;
+}
+.settings-card .setting-row:nth-child(3) {
+  animation-delay: 0.1s;
+}
+.settings-card .setting-row:nth-child(4) {
+  animation-delay: 0.15s;
+}
+.settings-card .setting-row:nth-child(5) {
+  animation-delay: 0.2s;
+}
+.lesson-row {
+  animation: rise-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.lesson-row:nth-of-type(2) {
+  animation-delay: 0.04s;
+}
+.lesson-row:nth-of-type(3) {
+  animation-delay: 0.08s;
+}
+.lesson-row:nth-of-type(4) {
+  animation-delay: 0.12s;
+}
+.lesson-row:nth-of-type(5) {
+  animation-delay: 0.16s;
+}
+.lesson-row:nth-of-type(6) {
+  animation-delay: 0.2s;
+}
+.lesson-row:nth-of-type(7) {
+  animation-delay: 0.24s;
+}
+
+/* ---------- player ---------- */
+
+.player-header {
+  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.stage-window {
+  animation: pop-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.05s backwards;
+}
+.stage-caption {
+  animation: rise-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.12s backwards;
+}
+.lesson-panel {
+  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.08s backwards;
+}
+.lesson-item {
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease;
+}
+.lesson-item:hover {
+  transform: translateX(3px);
+}
+.lesson-complete-done {
+  animation: pop-in 0.3s ease;
+}
+.player-nav button {
+  transition:
+    transform 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    opacity 0.18s ease;
+}
+.player-nav button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+/* ---------- sidebar profile menu ---------- */
+
+.profile-menu {
+  animation: pop-in 0.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transform-origin: bottom center;
+}
+.profile-wrap:has(.profile-menu) .profile-card svg {
+  transform: rotate(180deg);
+}
+
+/* ---------- theme switch (light <-> dark) ---------- */
+
+.theme-toggle svg {
+  animation: theme-icon-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.theme-toggle:hover svg {
+  transform: rotate(-14deg) scale(1.05);
+}
+
+/* While App holds .theme-animating on the root (during a toggle), every
+   themed color cross-fades and a light sweep washes across the screen. */
+.theme-animating *,
+.theme-animating *::before,
+.theme-animating *::after {
+  transition:
+    background-color 0.45s ease,
+    border-color 0.45s ease,
+    color 0.45s ease,
+    box-shadow 0.45s ease,
+    fill 0.45s ease,
+    stroke 0.45s ease,
+    outline-color 0.45s ease !important;
+}
+.theme-animating::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  background: linear-gradient(
+    112deg,
+    transparent 32%,
+    rgba(255, 255, 255, 0.24) 50%,
+    rgba(120, 180, 140, 0.12) 58%,
+    transparent 72%
+  );
+  transform: translateX(-100%);
+  animation: theme-sweep 0.62s ease-out forwards;
+}
+.dark-mode.theme-animating::after {
+  background: linear-gradient(
+    112deg,
+    transparent 32%,
+    rgba(220, 240, 225, 0.1) 50%,
+    rgba(90, 200, 130, 0.08) 58%,
+    transparent 72%
+  );
+}
+
+/* ---------- ambient loops ---------- */
+
+.hero-kicker-dot,
+.online-dot {
+  animation: dot-pulse 2.2s ease-in-out infinite;
+}
+.flame-icon {
+  animation: flame-flicker 1.7s ease-in-out infinite;
+}
+.floating-badge {
+  animation: floaty 4.5s ease-in-out infinite;
+}
+.float-check {
+  animation-delay: -2.2s;
+}
+.landing-sun {
+  animation: spin-slow 28s linear infinite;
+}
+.visual-caption .caption-play {
+  animation: dot-pulse 2.6s ease-in-out infinite;
+}

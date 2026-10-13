@@ -8,10 +8,12 @@ import "./ProfilePage.css";
 export function ProfilePage({
   enrolledCourses,
   isMonthlyMember,
+  plan,
   onExplore,
   onMyLearning,
   onSaved,
   onSettings,
+  onManagePlans,
 }) {
   return (
     <div className="profile-page">
@@ -26,13 +28,15 @@ export function ProfilePage({
         </button>
       </div>
 
-      <ProfileHero isMonthlyMember={isMonthlyMember} />
+      <ProfileHero isMonthlyMember={isMonthlyMember} plan={plan} />
 
       <ProfileStats enrolledCount={enrolledCourses.length} />
 
       <ProfileAccountCards
         isMonthlyMember={isMonthlyMember}
+        plan={plan}
         onExplore={onExplore}
+        onManagePlans={onManagePlans}
       />
 
       <ProfileShortcuts

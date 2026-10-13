@@ -3,6 +3,7 @@ import {
   Bookmark,
   CircleHelp,
   Compass,
+  CreditCard,
   LayoutDashboard,
   Settings,
   UserRound,
@@ -19,6 +20,7 @@ const NAV_ITEMS = [
   { key: "Explore", label: "Explore courses", icon: Compass },
   { key: "Saved", label: "Saved courses", icon: Bookmark },
   { key: "Profile", label: "My profile", icon: UserRound },
+  { key: "Subscription", label: "Subscription", icon: CreditCard },
 ];
 
 export function Sidebar({
@@ -82,8 +84,8 @@ export function Sidebar({
           Help center
         </button>
         <button
-          className="nav-item"
-          onClick={() => onNotify("Settings will be available soon.")}
+          className={`nav-item ${activeNav === "Settings" ? "active" : ""}`}
+          onClick={() => onNavigate("Settings")}
         >
           <Settings size={18} />
           Settings

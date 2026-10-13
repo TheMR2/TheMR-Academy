@@ -1,22 +1,29 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { courses } from "../data/catalog.js";
+import { useReveal } from "../hooks/useReveal.js";
 import { Sidebar } from "../components/Sidebar/Sidebar.jsx";
 import { TopBar } from "../components/TopBar/TopBar.jsx";
 import { Toast } from "../components/Toast/Toast.jsx";
 import { CourseModal } from "../components/CourseModal/CourseModal.jsx";
 import { DashboardLibrary } from "../pages/DashboardLibrary/DashboardLibrary.jsx";
 import { ProfilePage } from "../pages/ProfilePage/ProfilePage.jsx";
+import { SettingsPage } from "../pages/SettingsPage/SettingsPage.jsx";
 import { Landing } from "../pages/LandingPage/Landing.jsx";
 import { CoursesPage } from "../pages/CoursesPage/CoursesPage.jsx";
 import { OverviewPage } from "../pages/OverviewPage/OverviewPage.jsx";
+import { CoursePlayer } from "../pages/CoursePlayer/CoursePlayer.jsx";
+import { SubscriptionPage } from "../pages/SubscriptionPage/SubscriptionPage.jsx";
 import "./App.css";
 import "../theme.css";
+import "../animations.css";
 
 const STORAGE_KEYS = {
   theme: "themr-academy-theme",
   enrollments: "themr-academy-enrollments",
   membership: "themr-academy-monthly-member",
+  plan: "themr-academy-plan",
   savedCourses: "themr-academy-saved-courses",
+  lessonProgress: "themr-academy-lesson-progress",
 };
 
 let noticeTimer;
@@ -30,7 +37,19 @@ function readStoredList(key) {
   }
 }
 
+function readStoredMap(key) {
+  try {
+    const stored = JSON.parse(window.localStorage.getItem(key) || "{}");
+    return stored && typeof stored === "object" && !Array.isArray(stored)
+      ? stored
+      : {};
+  } catch {
+    return {};
+  }
+}
+
 export default function App() {
+  const appRef = useRef(null);
   const [inAcademy, setInAcademy] = useState(false);
   const [publicPage, setPublicPage] = useState("home");
   const [isDarkMode, setIsDarkMode] = useState(
@@ -39,11 +58,17 @@ export default function App() {
   const [isMonthlyMember, setIsMonthlyMember] = useState(
     () => window.localStorage.getItem(STORAGE_KEYS.membership) === "true",
   );
+  const [plan, setPlan] = useState(
+    () => window.localStorage.getItem(STORAGE_KEYS.plan) ?? "monthly",
+  );
   const [enrolledCourseIds, setEnrolledCourseIds] = useState(() =>
     readStoredList(STORAGE_KEYS.enrollments),
   );
   const [saved, setSaved] = useState(() =>
     readStoredList(STORAGE_KEYS.savedCourses),
+  );
+  const [lessonProgress, setLessonProgress] = useState(() =>
+    readStoredMap(STORAGE_KEYS.lessonProgress),
   );
 
   const [activeNav, setActiveNav] = useState("Overview");
@@ -53,7 +78,8 @@ export default function App() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [activeLesson, setActiveLesson] = useState(3);
+  const [playerCourseId, setPlayerCourseId] = useState(null);
+  const [activeLessonId, setActiveLessonId] = useState(null);
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -71,10 +97,21 @@ export default function App() {
 
   useEffect(() => {
     window.localStorage.setItem(
+      STORAGE_KEYS.lessonProgress,
+      JSON.stringify(lessonProgress),
+    );
+  }, [lessonProgress]);
+
+  useEffect(() => {
+    window.localStorage.setItem(
       STORAGE_KEYS.membership,
       String(isMonthlyMember),
     );
   }, [isMonthlyMember]);
+
+  useEffect(() => {
+    window.localStorage.setItem(STORAGE_KEYS.plan, plan);
+  }, [plan]);
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -83,9 +120,30 @@ export default function App() {
     );
   }, [isDarkMode]);
 
+  const completedIdsFor = (course) => {
+    const stored = lessonProgress[course.id];
+    if (Array.isArray(stored)) return stored;
+    const seeded = Math.round((course.progress / 100) * course.syllabus.length);
+    return course.syllabus.slice(0, seeded).map((lesson) => lesson.id);
+  };
+
+  const progressFor = (course) => {
+    const total = course.syllabus.length;
+    const done = completedIdsFor(course).length;
+    const percent = total ? Math.round((done / total) * 100) : 0;
+    return Math.max(course.progress, percent);
+  };
+
+  const allCourses = useMemo(
+    () =>
+      courses.map((course) => ({ ...course, progress: progressFor(course) })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [lessonProgress],
+  );
+
   const filteredCourses = useMemo(
     () =>
-      courses.filter(
+      allCourses.filter(
         (course) =>
           (activeCategory === "All courses" ||
             course.category === activeCategory) &&
@@ -93,7 +151,7 @@ export default function App() {
             .toLowerCase()
             .includes(query.toLowerCase()),
       ),
-    [activeCategory, query],
+    [allCourses, activeCategory, query],
   );
 
   const visibleCourses = useMemo(() => {
@@ -111,12 +169,20 @@ export default function App() {
 
   const enrolledCourses = useMemo(
     () =>
-      courses.filter(
+      allCourses.filter(
         (course) =>
           course.progress > 0 || enrolledCourseIds.includes(course.id),
       ),
-    [enrolledCourseIds],
+    [allCourses, enrolledCourseIds],
   );
+
+  useReveal(appRef, [
+    inAcademy,
+    activeNav,
+    playerCourseId,
+    activeLessonId,
+    publicPage,
+  ]);
 
   const notify = (message) => {
     setNotice(message);
@@ -138,10 +204,27 @@ export default function App() {
 
   const toggleTheme = () => setIsDarkMode((current) => !current);
 
+  const firstThemeRender = useRef(true);
+  useEffect(() => {
+    if (firstThemeRender.current) {
+      firstThemeRender.current = false;
+      return undefined;
+    }
+    const root = document.querySelector(".app-shell, .theme-frame");
+    if (!root) return undefined;
+    root.classList.add("theme-animating");
+    const timer = window.setTimeout(() => {
+      root.classList.remove("theme-animating");
+    }, 650);
+    return () => window.clearTimeout(timer);
+  }, [isDarkMode]);
+
   const goTo = (nav) => {
     setActiveNav(nav);
     setMenuOpen(false);
     setProfileOpen(false);
+    setPlayerCourseId(null);
+    setActiveLessonId(null);
     if (nav !== "Explore") {
       setActiveCategory("All courses");
       setQuery("");
@@ -160,10 +243,35 @@ export default function App() {
     goTo("Explore");
   };
 
-  const startLesson = () => {
-    setActiveNav("My learning");
+  const toggleLessonComplete = (course, lessonId) => {
+    setLessonProgress((current) => {
+      const existing = Array.isArray(current[course.id])
+        ? current[course.id]
+        : completedIdsFor(course);
+      const next = existing.includes(lessonId)
+        ? existing.filter((id) => id !== lessonId)
+        : [...existing, lessonId];
+      return { ...current, [course.id]: next };
+    });
+  };
+
+  const openPlayer = (course, lessonId) => {
+    const completedIds = completedIdsFor(course);
+    const firstIncomplete =
+      course.syllabus.find((lesson) => !completedIds.includes(lesson.id)) ??
+      course.syllabus[0];
+    enrollCourse(course.id);
     setSelectedCourse(null);
-    notify("Lesson ready — let’s keep going!");
+    setPlayerCourseId(course.id);
+    setActiveLessonId(lessonId ?? firstIncomplete.id);
+    setActiveNav("My learning");
+    window.scrollTo({ top: 0 });
+  };
+
+  const closePlayer = () => {
+    setPlayerCourseId(null);
+    setActiveLessonId(null);
+    window.scrollTo({ top: 0 });
   };
 
   const enterAcademy = () => {
@@ -177,9 +285,47 @@ export default function App() {
     window.scrollTo({ top: 0 });
   };
 
+  const resetLearningData = () => {
+    setEnrolledCourseIds([]);
+    setSaved([]);
+    setLessonProgress({});
+    notify("Your learning progress was cleared.");
+  };
+
+  const choosePlan = (planId) => {
+    if (planId === "free") {
+      setIsMonthlyMember(false);
+      notify("You're back on the free plan.");
+      return;
+    }
+    setPlan(planId);
+    setIsMonthlyMember(true);
+    notify(
+      planId === "yearly"
+        ? "Yearly plan active — welcome in!"
+        : "Monthly plan active — welcome in!",
+    );
+  };
+
+  const playerCourse = playerCourseId
+    ? (allCourses.find((course) => course.id === playerCourseId) ?? null)
+    : null;
+
+  const continueCourse =
+    allCourses.find((course) => course.progress > 0) ?? allCourses[0];
+  const continueCompletedIds = completedIdsFor(continueCourse);
+  const continueNextLesson =
+    continueCourse.syllabus.find(
+      (lesson) => !continueCompletedIds.includes(lesson.id),
+    ) ?? continueCourse.syllabus[0];
+
   if (!inAcademy) {
     return (
-      <div className={`theme-frame ${isDarkMode ? "dark-mode" : ""}`}>
+      <div
+        ref={appRef}
+        key={`public-${publicPage}`}
+        className={`theme-frame ${isDarkMode ? "dark-mode" : ""}`}
+      >
         {publicPage === "courses" ? (
           <CoursesPage
             onHome={() => setPublicPage("home")}
@@ -233,8 +379,24 @@ export default function App() {
           onOpenProfile={() => goTo("Profile")}
         />
 
-        <div className="page-content">
-          {activeNav === "Overview" ? (
+        <div
+          ref={appRef}
+          key={`page-${activeNav}-${playerCourseId ?? "none"}-${playerCourseId ? activeLessonId : "none"}`}
+          className="page-content"
+        >
+          {playerCourse ? (
+            <CoursePlayer
+              course={playerCourse}
+              completedLessonIds={completedIdsFor(playerCourse)}
+              activeLessonId={activeLessonId}
+              onSelectLesson={setActiveLessonId}
+              onToggleComplete={() =>
+                toggleLessonComplete(playerCourse, activeLessonId)
+              }
+              onBack={closePlayer}
+              onNotify={notify}
+            />
+          ) : activeNav === "Overview" ? (
             <OverviewPage
               activeNav={activeNav}
               activeCategory={activeCategory}
@@ -245,6 +407,11 @@ export default function App() {
               savedIds={saved}
               onSave={toggleSaved}
               onOpenCourse={setSelectedCourse}
+              continueCourse={continueCourse}
+              continueDone={continueCompletedIds.length}
+              continueTotal={continueCourse.syllabus.length}
+              continueNextLesson={continueNextLesson}
+              onContinue={() => openPlayer(continueCourse)}
               onSelectTrack={(category) => {
                 setActiveCategory(category);
                 goTo("Explore");
@@ -258,12 +425,31 @@ export default function App() {
             <ProfilePage
               enrolledCourses={enrolledCourses}
               isMonthlyMember={isMonthlyMember}
+              plan={plan}
               onExplore={() => goTo("Explore")}
               onMyLearning={() => goTo("My learning")}
               onSaved={() => goTo("Saved")}
-              onSettings={() =>
-                notify("Profile settings will be available soon.")
-              }
+              onSettings={() => goTo("Settings")}
+              onManagePlans={() => goTo("Subscription")}
+            />
+          ) : activeNav === "Settings" ? (
+            <SettingsPage
+              isDarkMode={isDarkMode}
+              onToggleTheme={toggleTheme}
+              isMonthlyMember={isMonthlyMember}
+              plan={plan}
+              onManagePlan={() => goTo("Subscription")}
+              enrolledCount={enrolledCourses.length}
+              savedCount={saved.length}
+              onResetData={resetLearningData}
+              onProfile={() => goTo("Profile")}
+            />
+          ) : activeNav === "Subscription" ? (
+            <SubscriptionPage
+              isMonthlyMember={isMonthlyMember}
+              plan={plan}
+              onChoosePlan={choosePlan}
+              onExploreCourses={() => goTo("Explore")}
             />
           ) : (
             <DashboardLibrary
@@ -277,7 +463,8 @@ export default function App() {
               setQuery={setQuery}
               onSave={toggleSaved}
               onDetails={setSelectedCourse}
-              onSubscribe={() => setIsMonthlyMember(true)}
+              onPlay={openPlayer}
+              onViewPlans={() => goTo("Subscription")}
               onEnroll={enrollCourse}
               enrolledIds={enrolledCourseIds}
               onBrowse={() => goTo("Explore")}
@@ -291,10 +478,9 @@ export default function App() {
       {selectedCourse && (
         <CourseModal
           course={selectedCourse}
-          activeLesson={activeLesson}
-          onSelectLesson={setActiveLesson}
+          completedIds={completedIdsFor(selectedCourse)}
           onClose={() => setSelectedCourse(null)}
-          onStart={startLesson}
+          onStart={openPlayer}
         />
       )}
     </div>

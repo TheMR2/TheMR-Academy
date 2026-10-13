@@ -370,7 +370,29 @@
     visibility: hidden;
   }
 }
+@keyframes float-card {
+  0% {
+    transform: translateY(0px) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(-4deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(-4deg);
+  }
+}
+@keyframes fadein-card {
+  0% {
+    transform: translateY(50px) rotate(-4deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px) rotate(-4deg);
+    opacity: 1;
+  }
+}
 .landing-preview {
+  animation: fadein-card 1s ease-in-out;
   position: absolute;
   z-index: 3;
   width: 143px;
@@ -416,6 +438,9 @@
   font-style: normal;
 }
 .hero-sticker {
+  animation:
+    fadein-card 1s ease-in-out,
+    float-card 3s ease-in-out infinite;
   position: absolute;
   z-index: 4;
   display: flex;

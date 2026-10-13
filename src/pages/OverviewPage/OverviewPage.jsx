@@ -1,4 +1,3 @@
-import { courses } from "../../data/catalog.js";
 import { WelcomeSection } from "./WelcomeSection.jsx";
 import { ContinueLearningCard } from "./ContinueLearningCard.jsx";
 import { LearningPathsSection } from "./LearningPathsSection.jsx";
@@ -17,6 +16,11 @@ export function OverviewPage({
   savedIds,
   onSave,
   onOpenCourse,
+  continueCourse,
+  continueDone,
+  continueTotal,
+  continueNextLesson,
+  onContinue,
   onSelectTrack,
   onExploreAll,
   onResetFilters,
@@ -27,7 +31,13 @@ export function OverviewPage({
     <>
       <WelcomeSection />
 
-      <ContinueLearningCard onContinue={() => onOpenCourse(courses[0])} />
+      <ContinueLearningCard
+        course={continueCourse}
+        doneLessons={continueDone}
+        totalLessons={continueTotal}
+        nextLesson={continueNextLesson}
+        onContinue={onContinue}
+      />
 
       <LearningPathsSection
         onSelectTrack={onSelectTrack}

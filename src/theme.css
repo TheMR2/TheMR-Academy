@@ -749,8 +749,297 @@
 .dark-mode .profile-menu button:hover {
   background: #303a34;
 }
+.dark-mode .settings-card {
+  background: #171f1a;
+  border-color: #2b372f;
+}
+.dark-mode .setting-copy b {
+  color: #dce7de;
+}
+.dark-mode .setting-copy small {
+  color: #91a096;
+}
+.dark-mode .setting-icon {
+  background: #293b2c;
+  color: #9fc99f;
+}
+.dark-mode .setting-row + .setting-row {
+  border-color: #2b372f;
+}
+.dark-mode .settings-switch span {
+  background: #3a4740;
+}
+.dark-mode .settings-switch span::after {
+  background: #c3cec5;
+}
+.dark-mode .settings-switch input:checked + span {
+  background: #2e8b60;
+}
+.dark-mode .settings-switch input:checked + span::after {
+  background: #eaf3ec;
+}
+.dark-mode .settings-secondary-button {
+  background: #1a221c;
+  border-color: #344137;
+  color: #a9b8ad;
+}
+.dark-mode .settings-danger-button {
+  background: #2a1d1a;
+  border-color: #4a332c;
+  color: #dd9c8a;
+}
+.dark-mode .settings-quiet-button {
+  color: #a3b4a6;
+}
 @media (prefers-reduced-motion: reduce) {
   .theme-toggle {
     transition: none;
   }
+}
+
+/* Course player */
+.dark-mode .player-back {
+  color: #91a096;
+}
+.dark-mode .player-back:hover {
+  color: #7fcb9a;
+}
+.dark-mode .player-title-copy h1 {
+  color: #dce7de;
+}
+.dark-mode .player-title-meta,
+.dark-mode .player-progress-copy small {
+  color: #91a096;
+}
+.dark-mode .player-progress-copy b {
+  color: #7fcb9a;
+}
+.dark-mode .player-course-badge {
+  border-color: #2b372f;
+  color: #cdd9d0;
+  box-shadow: none;
+}
+.dark-mode .player-progress i {
+  background: #2b372f;
+}
+.dark-mode .player-stage {
+  border-color: #2b372f;
+  box-shadow: none;
+}
+.dark-mode .stage-window {
+  background: #131a16;
+  border-color: #2b372f;
+  box-shadow: none;
+}
+.dark-mode .stage-window-bar {
+  background: #1a231d;
+  border-color: #2b372f;
+}
+.dark-mode .stage-window-bar i {
+  background: #3a4740;
+}
+.dark-mode .stage-window-bar span {
+  color: #7d8c82;
+}
+.dark-mode .stage-caption h2 {
+  color: #dce7de;
+}
+.dark-mode .stage-caption p,
+.dark-mode .stage-lesson-label,
+.dark-mode .stage-caption-duration {
+  color: #91a096;
+}
+.dark-mode .lesson-content,
+.dark-mode .lesson-panel {
+  background: #171f1a;
+  border-color: #2b372f;
+}
+.dark-mode .lesson-content-main h2,
+.dark-mode .lesson-panel-head strong {
+  color: #dce7de;
+}
+.dark-mode .lesson-content-summary {
+  color: #a9b8ad;
+}
+.dark-mode .lesson-notes {
+  background: #1a231d;
+  border-color: #4d885b;
+}
+.dark-mode .lesson-notes p {
+  color: #91a096;
+}
+.dark-mode .lesson-resources button {
+  background: #1a231d;
+  border-color: #2b372f;
+  color: #a9b8ad;
+}
+.dark-mode .lesson-resources button:hover {
+  border-color: #4d885b;
+  color: #7fcb9a;
+}
+.dark-mode .lesson-content-side small,
+.dark-mode .lesson-panel-head small,
+.dark-mode .lesson-item-copy small {
+  color: #7d8c82;
+}
+.dark-mode .lesson-complete-button {
+  background: #2e8b60;
+  border-color: #2e8b60;
+}
+.dark-mode .lesson-complete-button:hover {
+  background: #276843;
+}
+.dark-mode .lesson-complete-done {
+  background: #1a231d;
+  color: #7fcb9a;
+}
+.dark-mode .lesson-item:hover {
+  background: #1e2a23;
+}
+.dark-mode .lesson-item-active {
+  background: #223028;
+}
+.dark-mode .lesson-item-number {
+  background: #1a231d;
+  border-color: #2b372f;
+  color: #91a096;
+}
+.dark-mode .lesson-item-copy b {
+  color: #cdd9d0;
+}
+.dark-mode .lesson-item-done .lesson-item-copy b {
+  color: #7d8c82;
+}
+.dark-mode .player-nav button {
+  background: #1a231d;
+  border-color: #2b372f;
+  color: #a9b8ad;
+}
+.dark-mode .player-nav button:hover:not(:disabled) {
+  border-color: #4d885b;
+  color: #7fcb9a;
+}
+.dark-mode .player-nav-next {
+  background: #dce7de !important;
+  border-color: #dce7de !important;
+  color: #171f1a !important;
+}
+.dark-mode .player-nav-next:hover:not(:disabled) {
+  background: #ffffff !important;
+  color: #171f1a !important;
+}
+.dark-mode .player-nav-complete-next {
+  background: #1a231d;
+  border-color: #34503b;
+  color: #7fcb9a;
+}
+
+/* Subscription page */
+.dark-mode .plan-status {
+  background: #171f1a;
+  border-color: #2b372f;
+}
+.dark-mode .plan-status-active {
+  background: #1a241d;
+  border-color: #34503b;
+}
+.dark-mode .plan-status-icon {
+  background: #223028;
+  color: #7fcb9a;
+}
+.dark-mode .plan-status-copy span {
+  color: #91a096;
+}
+.dark-mode .plan-status-copy h2 {
+  color: #dce7de;
+}
+.dark-mode .plan-status-copy p {
+  color: #91a096;
+}
+.dark-mode .plan-status-price b {
+  color: #dce7de;
+}
+.dark-mode .plan-status-price small {
+  color: #7d8c82;
+}
+.dark-mode .plan-status-price a {
+  color: #7fcb9a;
+}
+.dark-mode .plan-card {
+  background: #171f1a;
+  border-color: #2b372f;
+}
+.dark-mode .plan-card:hover {
+  box-shadow: 0 16px 34px #00000040;
+}
+.dark-mode .plan-card-featured {
+  background: #1a241d;
+  border-color: #3f6149;
+  box-shadow: 0 10px 26px #00000030;
+}
+.dark-mode .plan-card-active {
+  border-color: #7fcb9a;
+  box-shadow: 0 0 0 2px #7fcb9a30;
+}
+.dark-mode .plan-tag {
+  background: #2e8b60;
+  color: #ecf5ee;
+}
+.dark-mode .plan-name {
+  color: #91a096;
+}
+.dark-mode .plan-price b {
+  color: #dce7de;
+}
+.dark-mode .plan-price span {
+  color: #7d8c82;
+}
+.dark-mode .plan-tagline {
+  color: #a9b8ad;
+}
+.dark-mode .plan-features {
+  border-top-color: #2b372f;
+}
+.dark-mode .plan-features li {
+  color: #cdd9d0;
+}
+.dark-mode .plan-features svg {
+  color: #7fcb9a;
+}
+.dark-mode .plan-cta {
+  background: #1a231d;
+  border-color: #2b372f;
+  color: #a9b8ad;
+}
+.dark-mode .plan-cta:hover:not(:disabled) {
+  border-color: #4d885b;
+  color: #7fcb9a;
+}
+.dark-mode .plan-cta-primary {
+  background: #dce7de;
+  border-color: #dce7de;
+  color: #171f1a;
+}
+.dark-mode .plan-cta-primary:hover:not(:disabled) {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #171f1a;
+}
+.dark-mode .plan-cta-current {
+  background: #1a241d;
+  border-color: #34503b;
+  color: #7fcb9a;
+}
+.dark-mode .faq-card {
+  background: #171f1a;
+  border-color: #2b372f;
+}
+.dark-mode .faq-card:hover {
+  box-shadow: 0 12px 26px #00000035;
+}
+.dark-mode .faq-card strong {
+  color: #dce7de;
+}
+.dark-mode .faq-card p {
+  color: #91a096;
 }

@@ -1,6 +1,18 @@
 import { ArrowRight, Check, Code2, Play } from "lucide-react";
 
-export function ContinueLearningCard({ onContinue }) {
+export function ContinueLearningCard({
+  course,
+  doneLessons,
+  totalLessons,
+  nextLesson,
+  onContinue,
+}) {
+  const percent = course.progress;
+  const lessonNumber = String(Math.min(doneLessons + 1, totalLessons)).padStart(
+    2,
+    "0",
+  );
+
   return (
     <section className="hero-card" id="continue-learning">
       <div className="hero-copy">
@@ -14,19 +26,21 @@ export function ContinueLearningCard({ onContinue }) {
           something great.
         </h2>
         <p>
-          Every line of code gets you closer to your goal. Keep learning HTML &
-          CSS Foundations.
+          Every line of code gets you closer to your goal. Keep learning{" "}
+          {course.title}.
         </p>
         <button className="primary-button" onClick={onContinue}>
           Continue learning <ArrowRight size={16} />
         </button>
         <div className="hero-progress-meta">
           <span>YOUR PROGRESS</span>
-          <b>12 of 18 lessons</b>
-          <span>68%</span>
+          <b>
+            {doneLessons} of {totalLessons} lessons
+          </b>
+          <span>{percent}%</span>
         </div>
         <div className="progress-track">
-          <div style={{ width: "68%" }} />
+          <div style={{ width: `${percent}%` }} />
         </div>
       </div>
 
@@ -90,8 +104,8 @@ export function ContinueLearningCard({ onContinue }) {
         </div>
 
         <div className="visual-caption">
-          <span>LESSON 12</span>
-          <b>Styling your first page</b>
+          <span>LESSON {lessonNumber}</span>
+          <b>{nextLesson.title}</b>
           <span className="caption-play">
             <Play size={13} fill="currentColor" />
           </span>

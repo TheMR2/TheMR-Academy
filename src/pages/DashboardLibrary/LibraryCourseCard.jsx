@@ -1,9 +1,9 @@
 import { ArrowRight, Bookmark, BookOpen, Clock3, Play } from "lucide-react";
 
-function buildMainLabel({ isEnrolled, isMonthlyMember, isExplore }) {
+function buildMainLabel({ isEnrolled, isMonthlyMember }) {
   if (isEnrolled) return "Continue";
   if (isMonthlyMember) return "Add to My Learning";
-  return isExplore ? "Monthly plan" : "Choose monthly plan";
+  return "View plans";
 }
 
 export function LibraryCourseCard({
@@ -15,6 +15,7 @@ export function LibraryCourseCard({
   isMonthlyMember,
   onSave,
   onDetails,
+  onPlay,
   onEnroll,
   onSubscribePlan,
 }) {
@@ -22,7 +23,7 @@ export function LibraryCourseCard({
 
   const handleMainAction = () => {
     if (isEnrolled) {
-      onDetails(course);
+      onPlay(course);
       return;
     }
     if (!isMonthlyMember) {
@@ -114,7 +115,7 @@ export function LibraryCourseCard({
             )}{" "}
             {isLearning
               ? "Continue learning"
-              : buildMainLabel({ isEnrolled, isMonthlyMember, isExplore })}
+              : buildMainLabel({ isEnrolled, isMonthlyMember })}
             {!isLearning && !isEnrolled && <ArrowRight size={13} />}
           </button>
         </div>

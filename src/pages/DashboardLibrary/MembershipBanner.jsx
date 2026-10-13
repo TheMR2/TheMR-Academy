@@ -4,14 +4,14 @@ export function MembershipBanner({
   isMonthlyMember,
   message,
   onMessage,
-  onSubscribe,
+  onViewPlans,
 }) {
   const handleAction = () => {
     if (isMonthlyMember) {
-      onMessage("Your monthly membership preview is active.");
+      onMessage("Your membership is active.");
       return;
     }
-    onSubscribe();
+    onViewPlans();
   };
 
   return (
@@ -24,19 +24,17 @@ export function MembershipBanner({
 
       <div className="membership-copy">
         <span>
-          {isMonthlyMember
-            ? "YOUR MEMBERSHIP PREVIEW"
-            : "ONE MEMBERSHIP, EVERY COURSE"}
+          {isMonthlyMember ? "YOUR MEMBERSHIP" : "ONE MEMBERSHIP, EVERY COURSE"}
         </span>
         <h2>
           {isMonthlyMember
-            ? "Monthly membership preview active"
-            : "Learn everything with one monthly plan"}
+            ? "Your plan is active"
+            : "Learn everything with one plan"}
         </h2>
         <p>
           {isMonthlyMember
             ? "You can add any course to My Learning."
-            : "Monthly billing gives you access to the full course library. Price to be set."}
+            : "From $12/month (or $99/year) — every course in the library, cancel anytime."}
         </p>
         {message && <small className="membership-message">{message}</small>}
       </div>
@@ -44,11 +42,11 @@ export function MembershipBanner({
       <button onClick={handleAction}>
         {isMonthlyMember ? (
           <>
-            <Check size={14} /> Preview active
+            <Check size={14} /> Plan active
           </>
         ) : (
           <>
-            Choose monthly plan <ArrowRight size={14} />
+            View plans <ArrowRight size={14} />
           </>
         )}
       </button>

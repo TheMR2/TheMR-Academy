@@ -1,4 +1,4 @@
-export function ProfileHero({ isMonthlyMember }) {
+export function ProfileHero({ isMonthlyMember, plan }) {
   return (
     <section className="profile-hero-card">
       <div className="profile-avatar-large">M</div>
@@ -11,7 +11,11 @@ export function ProfileHero({ isMonthlyMember }) {
         <span
           className={isMonthlyMember ? "plan-dot plan-active" : "plan-dot"}
         />
-        {isMonthlyMember ? "Monthly plan preview" : "No active plan"}
+        {isMonthlyMember
+          ? plan === "yearly"
+            ? "Yearly plan preview"
+            : "Monthly plan preview"
+          : "No active plan"}
       </div>
     </section>
   );
