@@ -1,1 +1,23 @@
-.theme-toggle{width:30px;height:30px;display:grid;place-items:center;flex:none;border:1px solid #e6eae3;border-radius:50%;background:#fbfcf9;color:#64746a;transition:background .18s,color .18s,border .18s,transform .18s;cursor:pointer}.theme-toggle:hover{transform:rotate(-8deg);background:#eef4ed;color:#24794f;border-color:#d7e5d7}
+.theme-toggle {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border: 1px solid #e6eae3;
+  border-radius: 50%;
+  background: #fbfcf9;
+  color: #64746a;
+  transition:
+    background 0.18s,
+    color 0.18s,
+    border 0.18s,
+    transform 0.18s;
+  cursor: pointer;
+}
+.theme-toggle:hover {
+  transform: rotate(-8deg);
+  background: #eef4ed;
+  color: #24794f;
+  border-color: #d7e5d7;
+}

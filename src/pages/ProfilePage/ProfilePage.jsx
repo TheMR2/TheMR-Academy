@@ -1,13 +1,46 @@
-import React from 'react';
-import { ArrowRight, BookOpen, Bookmark, Clock3, Compass, Flame, GraduationCap, Settings } from 'lucide-react';
-import './ProfilePage.css';
+import { Settings } from "lucide-react";
+import { ProfileHero } from "./ProfileHero.jsx";
+import { ProfileStats } from "./ProfileStats.jsx";
+import { ProfileAccountCards } from "./ProfileAccountCards.jsx";
+import { ProfileShortcuts } from "./ProfileShortcuts.jsx";
+import "./ProfilePage.css";
 
-export function ProfilePage({ enrolledCourses, isMonthlyMember, onExplore, onMyLearning, onSaved, onSettings }) {
-  return <div className="profile-page">
-    <div className="dashboard-page-heading"><div><div className="section-overline">YOUR ACCOUNT</div><h1>My profile</h1><p>Your learning details, membership, and course shortcuts.</p></div><button className="profile-edit-button" onClick={onSettings}><Settings size={14}/> Profile settings</button></div>
-    <section className="profile-hero-card"><div className="profile-avatar-large">M</div><div className="profile-hero-copy"><span>LEARNER PROFILE</span><h2>Mohamed Reda</h2><p>Learning member since October 2026</p></div><div className="profile-plan-pill"><span className={isMonthlyMember?'plan-dot plan-active':'plan-dot'}/>{isMonthlyMember?'Monthly plan preview':'No active plan'}</div></section>
-    <div className="profile-stats-grid"><div><span className="profile-stat-icon"><BookOpen size={17}/></span><b>{enrolledCourses.length}</b><small>Courses in My Learning</small></div><div><span className="profile-stat-icon profile-stat-yellow"><Flame size={17}/></span><b>5 days</b><small>Current learning streak</small></div><div><span className="profile-stat-icon profile-stat-blue"><Clock3 size={17}/></span><b>2.5 hrs</b><small>Learning time this week</small></div></div>
-    <div className="profile-content-grid"><section className="profile-membership-card"><div className="profile-card-label">MEMBERSHIP</div><div className="profile-membership-head"><div className="membership-icon"><GraduationCap size={20}/></div><div><h3>Monthly membership</h3><p>{isMonthlyMember?'Preview active · no payment processed':'Access the full course library with one monthly plan.'}</p></div></div><div className="profile-membership-foot"><span>{isMonthlyMember?'Monthly preview':'Price to be set'}</span><button onClick={onExplore}>{isMonthlyMember?'Explore your courses':'View monthly plan'} <ArrowRight size={13}/></button></div></section><section className="profile-details-card"><div className="profile-card-label">ACCOUNT DETAILS</div><div><small>Full name</small><b>Mohamed Reda</b></div><div><small>Account type</small><b>Academy learner</b></div><div><small>Learning goal</small><b>Become a frontend developer</b></div></section></div>
-    <section className="profile-shortcuts"><div className="profile-shortcuts-heading"><div><div className="section-overline">YOUR ACADEMY</div><h2>Quick links</h2></div></div><div className="profile-shortcut-grid"><button onClick={onMyLearning}><span><BookOpen size={17}/></span><b>My Learning</b><small>{enrolledCourses.length} courses in progress</small><ArrowRight size={15}/></button><button onClick={onExplore}><span><Compass size={17}/></span><b>Explore Courses</b><small>Browse all courses</small><ArrowRight size={15}/></button><button onClick={onSaved}><span><Bookmark size={17}/></span><b>Saved Courses</b><small>Your bookmarked courses</small><ArrowRight size={15}/></button></div></section>
-  </div>;
+export function ProfilePage({
+  enrolledCourses,
+  isMonthlyMember,
+  onExplore,
+  onMyLearning,
+  onSaved,
+  onSettings,
+}) {
+  return (
+    <div className="profile-page">
+      <div className="dashboard-page-heading">
+        <div>
+          <div className="section-overline">YOUR ACCOUNT</div>
+          <h1>My profile</h1>
+          <p>Your learning details, membership, and course shortcuts.</p>
+        </div>
+        <button className="profile-edit-button" onClick={onSettings}>
+          <Settings size={14} /> Profile settings
+        </button>
+      </div>
+
+      <ProfileHero isMonthlyMember={isMonthlyMember} />
+
+      <ProfileStats enrolledCount={enrolledCourses.length} />
+
+      <ProfileAccountCards
+        isMonthlyMember={isMonthlyMember}
+        onExplore={onExplore}
+      />
+
+      <ProfileShortcuts
+        enrolledCount={enrolledCourses.length}
+        onMyLearning={onMyLearning}
+        onExplore={onExplore}
+        onSaved={onSaved}
+      />
+    </div>
+  );
 }
